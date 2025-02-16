@@ -11,10 +11,13 @@
     {{/* NOTE: For Production make sure you add `HUGO_ENV="production"` before your build command */}}
     {{ $production := eq (getenv "HUGO_ENV") "production" | or (eq site.Params.env "production") }}
     {{ $public := not .Params.private }}
-    {{ if and $production $public }}
-      <meta name="robots" content="index, follow">
-    {{ else }}
-      <meta name="robots" content="noindex, nofollow">
+    {{ $default_index := site.Params.default_indexing }}
+    {{ if $default_index }}
+      {{ if and $production $public }}
+        <meta name="robots" content="index, follow">
+      {{ else }}
+        <meta name="robots" content="noindex, nofollow">
+      {{ end }}
     {{ end }}
     {{ with .Params.author | default .Site.Params.author }}
       <meta name="author" content = "
